@@ -1,6 +1,20 @@
 "use client"
 
+import { SetStateAction, useState } from 'react';
+
 const SearchInput = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterBy, setFilterBy] = useState('all');
+
+  const handleSearch = () => {
+    // TO DO: implement search logic here
+    console.log(`Searching for ${searchQuery}`);
+  };
+
+  const handleFilterChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setFilterBy(event.target.value);
+  };
+
   return (
     <div className="bg-white flex px-4 py-3 my-8 border-b border-[#333] focus-within:border-gray-800 overflow-hidden max-w-md mx-auto font-[sans-serif]">
       <svg
@@ -14,8 +28,25 @@ const SearchInput = () => {
       <input
         type="email"
         placeholder="Search ..."
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.target.value)}
         className="w-full outline-none text-sm"
       />
+      <button
+        className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded"
+        onClick={handleSearch}
+      >
+        Search
+      </button>
+      <select
+        value={filterBy}
+        onChange={handleFilterChange}
+        className="ml-4"
+      >
+        <option value="all">All</option>
+        <option value="category">Category</option>
+        <option value="price">Price</option>
+      </select>
     </div>
   );
 };

@@ -9,32 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
-
-type Product = {
-  src: string;
-  alt: string;
-  name: string;
-  description: string;
-  price: string;
-  seller: string;
-};
-
-const generateRandomProduct = (index: number): Product => ({
-  src: `/api/placeholder/${800 + index}/${600 + index}?text=Product${
-    index + 1
-  }`,
-  alt: `Product ${index + 1}`,
-  name: `Product ${index + 1}`,
-  description: `This is a detailed description for Product ${
-    index + 1
-  }. It's a high-quality item with unique features.`,
-  price: `$${(Math.random() * 100 + 50).toFixed(2)}`,
-  seller: `Seller ${String.fromCharCode(65 + index)}`,
-});
-
-const products: Product[] = Array.from({ length: 5 }, (_, i) =>
-  generateRandomProduct(i)
-);
+import { heroSectionImages } from "../../../data";
 
 const CarouselHero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,10 +22,12 @@ const CarouselHero = () => {
     if (isPlaying) {
       intervalIdRef.current = window.setInterval(() => {
         setCurrentIndex((prevIndex) => {
-          const randomIndex = Math.floor(Math.random() * products.length);
+          const randomIndex = Math.floor(
+            Math.random() * heroSectionImages.length
+          );
           return randomIndex !== prevIndex
             ? randomIndex
-            : (randomIndex + 1) % products.length;
+            : (randomIndex + 1) % heroSectionImages.length;
         });
       }, 5000);
     }
@@ -68,12 +45,13 @@ const CarouselHero = () => {
 
   const goToPrevious = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + products.length) % products.length
+      (prevIndex) =>
+        (prevIndex - 1 + heroSectionImages.length) % heroSectionImages.length
     );
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % heroSectionImages.length);
   };
 
   const togglePlayPause = () => {
@@ -81,12 +59,10 @@ const CarouselHero = () => {
   };
 
   const copyDetails = () => {
-    const product = products[currentIndex];
+    const product = heroSectionImages[currentIndex];
     const details = `
-      Product: ${product.name}
-      Description: ${product.description}
-      Price: ${product.price}
-      Seller: ${product.seller}
+      Image: ${product.alt}
+      Description: ${product.description || "No description available"}
     `;
     navigator.clipboard.writeText(details).then(() => {
       setCopied(true);
@@ -96,7 +72,7 @@ const CarouselHero = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gray-100">
-      {products.map((product, index) => (
+      {heroSectionImages.map((image, index) => (
         <div
           key={index}
           className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
@@ -104,8 +80,8 @@ const CarouselHero = () => {
           }`}
         >
           <Image
-            src={product.src}
-            alt={product.alt}
+            src={image.src}
+            alt={image.alt}
             className="w-full h-full object-cover"
             width={800}
             height={800}
@@ -116,11 +92,11 @@ const CarouselHero = () => {
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 md:p-6">
               <div className="bg-white p-4 md:p-6 rounded-lg max-w-sm md:max-w-md">
                 <h2 className="text-lg md:text-2xl font-bold mb-2">
-                  {product.name}
+                  {image.alt}
                 </h2>
-                <p className="mb-2">{product.description}</p>
-                <p className="font-bold mb-2">Price: {product.price}</p>
-                <p className="mb-4">Seller: {product.seller}</p>
+                <p className="mb-2">
+                  {image.description || "No description available"}
+                </p>
                 <Button
                   onClick={copyDetails}
                   className="bg-blue-500 text-white px-3 md:px-4 py-2 rounded hover:bg-blue-600 flex items-center"
@@ -139,7 +115,7 @@ const CarouselHero = () => {
       ))}
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {products.map((_, index) => (
+        {heroSectionImages.map((_, index) => (
           <div
             key={index}
             className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
