@@ -1,83 +1,112 @@
-    "use client";
-    import React, { useState } from "react";
-    import {
-      HoveredLink,
-      Menu,
-      MenuItem,
-      ProductItem,
-    } from "../ui/navbar-menu";
-    import { cn } from "@/lib/utils";
+"use client";
 
-    export function NavbarDemo() {
-      return (
-        <div className="relative w-full flex items-center justify-center">
-          <Navbar className="top-2" />
-          <p className="text-black dark:text-white">
-            The Navbar will show on top of the page
-          </p>
-        </div>
-      );
-    }
+import React, { useState } from "react";
+import Link from "next/link";
+import { Menu, X, ShoppingCart, User, Bookmark, Search } from "lucide-react";
+import { navMenuItems } from "../../../data";
+import { Button } from "../ui/button";
 
-    function Navbar({ className }: { className?: string }) {
-      const [active, setActive] = useState<string | null>(null);
-      return (
-        <div
-          className={cn(
-            "fixed top-10 inset-x-0 max-w-2xl mx-auto z-50",
-            className
-          )}
-        >
-          <Menu setActive={setActive}>
-            <MenuItem setActive={setActive} active={active} item="Services">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/web-dev">Web Development</HoveredLink>
-                <HoveredLink href="/interface-design">
-                  Interface Design
-                </HoveredLink>
-                <HoveredLink href="/seo">
-                  Search Engine Optimization
-                </HoveredLink>
-                <HoveredLink href="/branding">Branding</HoveredLink>
-              </div>
-            </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Products">
-              <div className="  text-sm grid grid-cols-2 gap-10 p-4">
-                <ProductItem
-                  title="Algochurn"
-                  href="https://algochurn.com"
-                  src="https://assets.aceternity.com/demos/algochurn.webp"
-                  description="Prepare for tech interviews like never before."
-                />
-                <ProductItem
-                  title="Tailwind Master Kit"
-                  href="https://tailwindmasterkit.com"
-                  src="https://assets.aceternity.com/demos/tailwindmasterkit.webp"
-                  description="Production ready Tailwind css components for your next project"
-                />
-                <ProductItem
-                  title="Moonbeam"
-                  href="https://gomoonbeam.com"
-                  src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.51.31%E2%80%AFPM.png"
-                  description="Never write from scratch again. Go from idea to blog in minutes."
-                />
-                <ProductItem
-                  title="Rogue"
-                  href="https://userogue.com"
-                  src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
-                  description="Respond to government RFPs, RFIs and RFQs 10x faster using AI"
-                />
-              </div>
-            </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Pricing">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/hobby">Hobby</HoveredLink>
-                <HoveredLink href="/individual">Individual</HoveredLink>
-                <HoveredLink href="/team">Team</HoveredLink>
-                <HoveredLink href="/enterprise">Enterprise</HoveredLink>
-              </div>
-            </MenuItem>
-          </Menu>
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <nav className="bg-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link href="/" className="font-medium text-xl">
+              Groove Furniture
+            </Link>
+          </div>
+
+          <div className="hidden lg:flex lg:space-x-8">
+            {navMenuItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm lg:text-base font-medium ${
+                  item.className ||
+                  "text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden lg:flex lg:items-center space-x-4">
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <User className="h-5 w-5 lg:h-6 lg:w-6" />
+            </Button>
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <Bookmark className="h-5 w-5 lg:h-6 lg:w-6" />
+            </Button>
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <ShoppingCart className="h-5 w-5 lg:h-6 lg:w-6" />
+            </Button>
+          </div>
+
+          {/* Hamburger Menu Button for Mobile */}
+          <div className="flex items-center lg:hidden">
+            <Button
+              onClick={toggleMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <X className="block h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-6 w-6" aria-hidden="true" />
+              )}
+            </Button>
+          </div>
         </div>
-      );
-    }
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`lg:hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-screen" : "max-h-0 overflow-hidden"
+        }`}
+      >
+        <div className="pt-2 pb-3 space-y-1">
+          {navMenuItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                item.className
+                  ? "border-red-400 text-red-700 bg-red-50"
+                  : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+        <div className="pt-4 pb-3 border-t border-gray-200">
+          <div className="flex items-center px-4 space-x-4">
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <Search className="h-5 w-5" />
+            </Button>
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <User className="h-5 w-5" />
+            </Button>
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <Bookmark className="h-5 w-5" />
+            </Button>
+            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <ShoppingCart className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

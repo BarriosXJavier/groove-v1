@@ -1,114 +1,23 @@
-"use client";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Search, SlidersHorizontal } from "lucide-react";
+"use client"
 
 const SearchInput = () => {
-  const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Implement search logic here
-    console.log("Searching...");
-  };
-
-  const FilterSection = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="category">Category</Label>
-        <Select>
-          <SelectTrigger id="category">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="living-room">Living Room</SelectItem>
-            <SelectItem value="bedroom">Bedroom</SelectItem>
-            <SelectItem value="dining-room">Dining Room</SelectItem>
-            <SelectItem value="office">Office</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="space-y-2">
-        <Label>Price Range</Label>
-        <Slider
-          min={0}
-          max={5000}
-          step={100}
-          value={priceRange}
-          onValueChange={setPriceRange}
-        />
-        <div className="flex justify-between text-sm text-muted-foreground">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
-      <form onSubmit={handleSearch} className="space-y-4">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-grow">
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search furniture..."
-              className="pl-8"
-            />
-          </div>
-          <div className="sm:hidden">
-            <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  <SlidersHorizontal className="mr-2 h-4 w-4" />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Search Filters</SheetTitle>
-                  <SheetDescription>
-                    Adjust your search parameters
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-4">
-                  <FilterSection />
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-          <Button type="submit" className="w-full sm:w-auto">
-            Search
-          </Button>
-        </div>
-        <div className="hidden sm:block">
-          <FilterSection />
-        </div>
-      </form>
+    <div className="bg-white flex px-4 py-3 my-8 border-b border-[#333] focus-within:border-gray-800 overflow-hidden max-w-md mx-auto font-[sans-serif]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 192.904 192.904"
+        width="18px"
+        className="fill-gray-600 mr-3"
+      >
+        <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
+      </svg>
+      <input
+        type="email"
+        placeholder="Search ..."
+        className="w-full outline-none text-sm"
+      />
     </div>
   );
-}
+};
 
-export default SearchInput
+export default SearchInput;
