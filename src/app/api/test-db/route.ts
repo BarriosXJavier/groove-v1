@@ -1,16 +1,18 @@
 import dbConnect from "@/lib/mongodb";
-import User from "@/models/User";
+import dotenv from "dotenv";
 
-export async function GET() {
-    try {
-        await dbConnect();
-
-        const count = await User.countDocuments();
-        return new Response(`Database connected. user count: ${count}`, { status: 200 });
-    } catch(error) {
-        console.error("Error connecting to database:", error);
-        return new Response("Data")
-    }
+dotenv.config()
+async function testConnection() {
+  try {
+    await dbConnect();
+    console.log("Successfully connected to MongoDB");
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+  }
 }
 
-GET()
+console.log("MONGODB_URL:", process.env.MONGODB_URL);
+
+testConnection();
+
+
