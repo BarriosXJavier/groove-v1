@@ -2,6 +2,8 @@ import dbConnect from "@/lib/mongodb";
 import dotenv from "dotenv";
 
 dotenv.config()
+
+
 async function testConnection() {
   try {
     await dbConnect();
