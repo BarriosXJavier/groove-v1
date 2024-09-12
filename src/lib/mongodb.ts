@@ -1,15 +1,9 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv';
 
-dotenv.config();
+const MONGO_URI = process.env.MONGO_URI!;
 
-const MONGODB_URI = process.env.MONGODB_CONNECTION;
-
-// check if connection string exists
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URL environment variable inside .env"
-  );
+if (!MONGO_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGO_URI"');
 }
 
 interface Cached {
@@ -17,36 +11,37 @@ interface Cached {
   promise: Promise<typeof mongoose> | null;
 }
 
-// cached connection to prevent connections from being 
-// made multiple times while nextjs hot reloads
-let cached: Cached = (global as any).mongoose;
+let cached: Cached = global.mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-async function dbConnect() {
+async function dbConnect(): Promise<typeof mongoose> {
   if (cached.conn) {
     return cached.conn;
   }
+
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log("connected to mongodb");
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
       return mongoose;
     });
   }
 
   try {
     cached.conn = await cached.promise;
-  } catch (error) {
+  } catch (e) {
     cached.promise = null;
-    throw error;
+    throw e;
   }
+
   return cached.conn;
 }
+
+dbConnect()
 
 export default dbConnect;
