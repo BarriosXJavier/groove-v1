@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
-const MONGODB_URI = process.env.MONGODB_CONNECTION_STRING;
+dotenv.config();
+
+const MONGODB_URI = process.env.MONGODB_CONNECTION;
 
 // check if connection string exists
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGODB_URL environment variable inside .env.local"
+    "Please define the MONGODB_URL environment variable inside .env"
   );
 }
 

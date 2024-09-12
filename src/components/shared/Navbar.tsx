@@ -2,12 +2,15 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingCart, User, Bookmark, Search } from "lucide-react";
+import { Menu, X, User, Bookmark, Search } from "lucide-react";
 import { navMenuItems } from "../../../data";
 import { Button } from "../ui/button";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignedIn } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isSignedIn, user } = useUser();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -40,13 +43,10 @@ const Navbar = () => {
 
           <div className="hidden lg:flex lg:items-center space-x-4">
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <User className="h-5 w-5 lg:h-6 lg:w-6" />
+              {isSignedIn ? <UserButton /> : <SignInButton />}
             </Button>
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Bookmark className="h-5 w-5 lg:h-6 lg:w-6" />
-            </Button>
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <ShoppingCart className="h-5 w-5 lg:h-6 lg:w-6" />
             </Button>
           </div>
 
@@ -93,14 +93,9 @@ const Navbar = () => {
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Search className="h-5 w-5" />
             </Button>
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <User className="h-5 w-5" />
-            </Button>
+           {isSignedIn ? <UserButton /> : <SignInButton />}
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Bookmark className="h-5 w-5" />
-            </Button>
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <ShoppingCart className="h-5 w-5" />
             </Button>
           </div>
         </div>
