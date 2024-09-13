@@ -1,28 +1,31 @@
-import mongoose, { Mongoose } from "mongoose"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose, { Mongoose } from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
-
 interface MongooseConnection {
   conn: Mongoose | null;
-  promise: Promise<Mongoose> | null
+  promise: Promise<Mongoose> | null;
 }
 
-let cached: MongooseConnection = (global).mongoose = {
-  conn: null,
-  promise: null,
+let cache: MongooseConnection = (global as any).mongoose;
+
+if (!cache) {
+  cache = (global as any).mongoose = { conn: null, promise: null };
 }
 
-export const dbConnect = async () => {
-  if (!cached.conn) {
-    return cached.conn;
-  }
-  cached.promise = cached.promise || mongoose.connect(MONGODB_URI, {
-    dbName: "clerk-next-mongodb",
-    bufferCommands: false,
-    connectTimeoutMS: 30000,
-  }); 
+export const connectToMongoDb = async () => {
+  if (cache.conn) return cache.conn;
 
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
+  cache.promise =
+    cache.promise ||
+    mongoose.connect(MONGODB_URI, {
+      dbName: "groove-furniture",
+      bufferCommands: false,
+      connectTimeoutMS: 30000,
+    });
+
+  cache.conn = await cache.promise;
+
+  return cache.conn; 
+};
