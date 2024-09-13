@@ -10,4 +10,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+// Check if the model already exists in mongoose.models
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
+
+export default User;

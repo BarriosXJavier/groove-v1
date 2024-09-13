@@ -22,7 +22,12 @@ const nextConfig = {
                 pathname: '/photos/**',
             }
         ]
-    }
+    },
+    // Acccess env variables in client side
+    // reactStrictMode: true,
+    // env: {
+    //     BASE_URL: process.env.BASE_URL,
+    // },
 };
 
 export default nextConfig;
