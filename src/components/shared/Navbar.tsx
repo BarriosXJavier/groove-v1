@@ -2,15 +2,21 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, User, Bookmark, Search } from "lucide-react";
+import { Menu, X, Bookmark, Search } from "lucide-react";
 import { navMenuItems } from "../../../data";
 import { Button } from "../ui/button";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { SignInButton, SignedIn } from "@clerk/nextjs";
+import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 
-const Navbar = () => {
+// Define the shape of a navigation menu item
+interface NavMenuItem {
+  name: string;
+  href: string;
+  className?: string;
+}
+
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -27,7 +33,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex lg:space-x-8">
-            {navMenuItems.map((item) => (
+            {navMenuItems.map((item: NavMenuItem) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -74,7 +80,7 @@ const Navbar = () => {
         }`}
       >
         <div className="pt-2 pb-3 space-y-1">
-          {navMenuItems.map((item) => (
+          {navMenuItems.map((item: NavMenuItem) => (
             <Link
               key={item.name}
               href={item.href}
@@ -93,7 +99,7 @@ const Navbar = () => {
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Search className="h-5 w-5" />
             </Button>
-           {isSignedIn ? <UserButton /> : <SignInButton />}
+            {isSignedIn ? <UserButton /> : <SignInButton />}
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Bookmark className="h-5 w-5" />
             </Button>
