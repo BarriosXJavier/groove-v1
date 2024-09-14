@@ -1,10 +1,23 @@
+"use client"
+
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import {
+  LayoutGridIcon,
+  PencilIcon,
+  TrashIcon,
+  MenuIcon,
+  PlusCircleIcon,
+} from "lucide-react";
+import { useState } from "react";
 
-export default function Component() {
+export default function DashboardPage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const user = {
     name: "John Doe",
     avatar: "/placeholder-user.jpg",
@@ -43,96 +56,115 @@ export default function Component() {
       status: "active",
     },
   ];
+
   return (
-    <div className="flex min-h-screen bg-muted">
-      <aside className="bg-background border-r w-64 p-6">
+    <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 md:flex-row">
+      {/* Mobile Sidebar Toggle */}
+      <div className="md:hidden p-4 bg-white shadow-sm">
+        <Button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          size="sm"
+          variant="ghost"
+          className="text-gray-600 hover:text-gray-800"
+        >
+          <MenuIcon className="w-5 h-5" />
+        </Button>
+      </div>
+
+      {/* Sidebar */}
+      <aside
+        className={`bg-white shadow-md w-full md:w-64 p-6 ${
+          sidebarOpen ? "block" : "hidden"
+        } md:block transition-all duration-300 ease-in-out`}
+      >
         <div className="flex items-center gap-4 mb-8">
-          <Avatar className="w-10 h-10">
+          <Avatar className="w-12 h-12 border-2 border-blue-500">
             <AvatarImage src="/placeholder-user.jpg" alt={user.name} />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-lg font-semibold">{user.name}</h2>
-            <p className="text-sm text-muted-foreground">Furniture Seller</p>
+            <h2 className="text-lg text-gray-800">{user.name}</h2>
+            <p className="text-sm text-gray-500">Furniture dealer</p>
           </div>
         </div>
         <nav className="space-y-2">
           <Link
             href="#"
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-200"
             prefetch={false}
           >
-            <LayoutGridIcon className="w-4 h-4" />
+            <LayoutGridIcon className="w-5 h-5" />
             All Listings
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            <CheckIcon className="w-4 h-4" />
-            Active Listings
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            <CheckIcon className="w-4 h-4" />
-            Sold Listings
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            <PencilIcon className="w-4 h-4" />
-            Drafts
           </Link>
         </nav>
       </aside>
-      <main className="flex-1 p-8">
-        <header className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Furniture Listings</h1>
-          <Button size="sm">Add New Listing</Button>
+
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-8 bg-gray-50">
+        <header className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+          <h1 className="text-xl text-gray-700 mb-4 md:mb-0">
+            Furniture Listings
+          </h1>
+          <Link href="/dashboard/createListingForm">
+            <Button
+              size="sm"
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <PlusCircleIcon className="w-4 h-4 mr-2" />
+              Add New Listing
+            </Button>
+          </Link>
         </header>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <Card key={listing.id}>
-              <img
-                src="/placeholder.svg"
-                alt={listing.title}
-                width={300}
-                height={200}
-                className="w-full h-48 object-cover rounded-t-lg"
-                style={{ aspectRatio: "300/200", objectFit: "cover" }}
-              />
-              <CardContent className="p-4">
-                <h3 className="text-lg font-semibold">{listing.title}</h3>
-                <p className="text-sm text-muted-foreground">
+            <Card
+              key={listing.id}
+              className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            >
+              <div className="relative pt-[66.67%] bg-gray-200">
+                <Image
+                  src="/placeholder.svg"
+                  alt={listing.title}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
+              </div>
+              <CardContent className="p-4 flex-grow bg-white">
+                <h3 className="text-lg text-gray-800 font-medium mb-2">
+                  {listing.title}
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
                   {listing.description}
                 </p>
-                <div className="flex items-center justify-between mt-4">
-                  <span className="text-lg font-bold">${listing.price}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-semibold text-blue-600">
+                    ${listing.price}
+                  </span>
                   <Badge
                     variant={
-                      listing.status === "active"
-                        ? "secondary"
-                        : listing.status === "sold"
-                        ? "success"
-                        : "outline"
+                      listing.status === "active" ? "secondary" : "outline"
                     }
+                    className="capitalize"
                   >
                     {listing.status}
                   </Badge>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end gap-2 p-4">
-                <Button size="sm" variant="outline">
+              <CardFooter className="flex justify-end gap-2 p-4 bg-gray-50">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-gray-600 hover:text-blue-600"
+                >
                   <PencilIcon className="w-4 h-4 mr-2" />
                   Edit
                 </Button>
-                <Button size="sm" variant="destructive">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
                   <TrashIcon className="w-4 h-4 mr-2" />
                   Delete
                 </Button>
@@ -142,87 +174,5 @@ export default function Component() {
         </div>
       </main>
     </div>
-  );
-}
-
-function CheckIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function LayoutGridIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="7" height="7" x="3" y="3" rx="1" />
-      <rect width="7" height="7" x="14" y="3" rx="1" />
-      <rect width="7" height="7" x="14" y="14" rx="1" />
-      <rect width="7" height="7" x="3" y="14" rx="1" />
-    </svg>
-  );
-}
-
-function PencilIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-      <path d="m15 5 4 4" />
-    </svg>
-  );
-}
-
-function TrashIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </svg>
   );
 }
