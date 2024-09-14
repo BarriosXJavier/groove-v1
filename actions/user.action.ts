@@ -11,7 +11,7 @@ interface IUser extends Document {
   create_At: Date;
 }
 
-// Define the shape of the input data
+// Shape of the input data
 interface CreateUserData {
   clerkId: string;
   email: string;
