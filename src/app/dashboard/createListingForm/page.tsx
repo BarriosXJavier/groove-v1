@@ -1,4 +1,4 @@
-import { CreateListingForm } from '@/components/create-listing-form.tsx'
+import { CreateListingForm } from '@/components/shared/create-listing-form.tsx'
 
 const page = () => {
   return (

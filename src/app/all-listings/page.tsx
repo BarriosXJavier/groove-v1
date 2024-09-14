@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
+import ProductCard from "@/components/shared/ProductCard";
 
 interface Listing {
   _id: string;
   title: string;
-  price: number;
+  price?: number; // Mark as optional
   description: string;
   location: string;
   tags: string[];
@@ -45,25 +46,15 @@ export default function AllListings() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6">
       {listings.map((listing) => (
-        <div key={listing._id} className="border p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold">{listing.title}</h2>
-          <p className="text-gray-600">Price: ${listing.price.toFixed(2)}</p>
-          <p className="text-gray-600">Location: {listing.location}</p>
-          <p className="text-gray-800 mt-2">{listing.description}</p>
-          {listing.images.length > 0 && (
-            <div className="mt-2">
-              <Image
-                src={listing.images[0]}
-                alt={listing.title}
-                width={300}
-                height={200}
-                className="object-cover rounded-lg"
-              />
-            </div>
-          )}
-        </div>
+        <ProductCard
+          key={listing._id}
+          title={listing.title}
+          price={listing.price || 0} // Handle undefined price
+          imageUrl={listing.images[0] || "/placeholder.svg"} // Handle empty images
+          location={listing.location}
+        />
       ))}
     </div>
   );

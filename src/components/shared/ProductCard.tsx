@@ -1,16 +1,27 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { BookmarkIcon } from "lucide-react";
 
-const ProductCard = () => {
+interface ProductCardProps {
+  title: string;
+  price?: number; // Mark as optional
+  imageUrl: string;
+  location: string;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  title,
+  price = 0,
+  imageUrl,
+  location,
+}) => {
   return (
     <Card className="w-full max-w-sm bg-background shadow-lg rounded-lg overflow-hidden">
       <div className="relative">
         <Image
-          src="/placeholder.svg"
-          alt="Product Image"
+          src={imageUrl}
+          alt={title}
           width={500}
           height={400}
           className="w-full h-64 object-cover"
@@ -26,13 +37,14 @@ const ProductCard = () => {
         </Button>
       </div>
       <div className="p-4">
-        <h3 className="text-xl mb-2">Cozy Knit Sweater</h3>
+        <h3 className="text-xl mb-2">{title}</h3>
         <div className="flex items-center justify-between">
-          <span className="text-2xl text-primary">$49.99</span>
+          <span className="text-2xl text-primary">${price.toFixed(2)}</span>
         </div>
+        <p className="text-sm text-gray-600 mt-2">{location}</p>
       </div>
     </Card>
   );
-}
+};
 
 export default ProductCard;
