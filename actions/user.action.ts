@@ -17,6 +17,7 @@ interface CreateUserData {
   email: string;
 }
 
+// Create a new user
 export async function createUser(
   userData: CreateUserData
 ): Promise<IUser | null> {
@@ -24,8 +25,42 @@ export async function createUser(
     await connectToMongoDb();
     const newUser = await User.create(userData);
     return JSON.parse(JSON.stringify(newUser));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error.code === 11000) {
+      console.error("Duplicate value detected:", error.keyValue);
+      throw new Error("Duplicate entry: email or clerkId already exists");
+    } else {
+      console.error("Error creating user:", error);
+      throw error;
+    }
+  }
+}
+
+
+
+// Find a user by their Clerk ID
+export async function findUserByClerkId(
+  clerkId: string
+): Promise<IUser | null> {
+  try {
+    await connectToMongoDb();
+    const user = await User.findOne({ clerkId });
+    return user ? JSON.parse(JSON.stringify(user)) : null;
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error finding user by Clerk ID:", error);
     return null;
   }
 }
+
+export async function findUserByEmail(email: string): Promise<IUser | null> {
+  try {
+    await connectToMongoDb();
+    const user = await User.findOne({ email });
+    return user ? JSON.parse(JSON.stringify(user)) : null;
+  } catch (error) {
+    console.error("Error finding user by email:", error);
+    return null;
+  }
+}
+
