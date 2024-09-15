@@ -1,5 +1,3 @@
-"use client"
-
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -8,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { LayoutGridIcon, CheckIcon, PencilIcon, TrashIcon } from "lucide-react";
 
-const DashboardPage = () => {
+export default function Component() {
   const user = {
     name: "John Doe",
     avatar: "/placeholder-user.jpg",
@@ -47,66 +45,60 @@ const DashboardPage = () => {
       status: "active",
     },
   ];
-
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 text-gray-800 md:flex-row">
-      {/* Mobile Sidebar Toggle */}
-      <div className="md:hidden p-4 bg-white shadow-sm">
-        <Button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          size="sm"
-          variant="ghost"
-          className="text-gray-600 hover:text-gray-800"
-        >
-          <MenuIcon className="w-5 h-5" />
-        </Button>
-      </div>
-
-      {/* Sidebar */}
-      <aside
-        className={`bg-white shadow-md w-full md:w-64 p-6 ${
-          sidebarOpen ? "block" : "hidden"
-        } md:block transition-all duration-300 ease-in-out`}
-      >
+    <div className="flex min-h-screen bg-muted">
+      <aside className="bg-background border-r w-64 p-6">
         <div className="flex items-center gap-4 mb-8">
-          <Avatar className="w-12 h-12 border-2 border-blue-500">
+          <Avatar className="w-10 h-10">
             <AvatarImage src="/placeholder-user.jpg" alt={user.name} />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-lg text-gray-800">{user.name}</h2>
-            <p className="text-sm text-gray-500">Furniture dealer</p>
+            <h2 className="text-lg font-semibold">{user.name}</h2>
+            <p className="text-sm text-muted-foreground">Furniture Seller</p>
           </div>
         </div>
         <nav className="space-y-2">
           <Link
             href="#"
-            className="flex items-center gap-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors duration-200"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
             prefetch={false}
           >
-            <LayoutGridIcon className="w-5 h-5" />
+            <LayoutGridIcon className="w-4 h-4" />
             All Listings
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            prefetch={false}
+          >
+            <CheckIcon className="w-4 h-4" />
+            Active Listings
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            prefetch={false}
+          >
+            <CheckIcon className="w-4 h-4" />
+            Sold Listings
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            prefetch={false}
+          >
+            <PencilIcon className="w-4 h-4" />
+            Drafts
           </Link>
         </nav>
       </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-4 md:p-8 bg-gray-50">
-        <header className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
-          <h1 className="text-xl text-gray-700 mb-4 md:mb-0">
-            Furniture Listings
-          </h1>
-          <Link href="/dashboard/createListingForm">
-            <Button
-              size="sm"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              <PlusCircleIcon className="w-4 h-4 mr-2" />
-              Add New Listing
-            </Button>
-          </Link>
+      <main className="flex-1 p-8">
+        <header className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold">Furniture Listings</h1>
+          <Button size="sm">Add New Listing</Button>
         </header>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {listings.map((listing) => (
             <Card key={listing.id}>
               <Image
@@ -126,20 +118,12 @@ const DashboardPage = () => {
                   <span className="text-lg font-bold">${listing.price}</span>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end gap-2 p-4 bg-gray-50">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="text-gray-600 hover:text-blue-600"
-                >
+              <CardFooter className="flex justify-end gap-2 p-4">
+                <Button size="sm" variant="outline">
                   <PencilIcon className="w-4 h-4 mr-2" />
                   Edit
                 </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                >
+                <Button size="sm" variant="destructive">
                   <TrashIcon className="w-4 h-4 mr-2" />
                   Delete
                 </Button>
@@ -151,5 +135,3 @@ const DashboardPage = () => {
     </div>
   );
 }
-
-export default DashboardPage;
