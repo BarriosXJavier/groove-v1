@@ -1,22 +1,32 @@
 import { NextResponse } from "next/server";
 import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
+import { auth } from "@clerk/nextjs/server";
 
 // Handle POST request for creating a new listing
 export async function POST(req: Request) {
   await connectToMongoDb();
 
   try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { title, price, description, location, tags, images } =
       await req.json();
 
-    // Create a new listing
     const newListing = new Listing({
+      clerkId: userId,
       title,
       price,
       description,
       location,
-      tags: tags.split(",").map((tag: string) => tag.trim()), // Split tags by commas
+      tags: tags.split(",").map((tag: string) => tag.trim()),
       images,
     });
 
@@ -40,7 +50,16 @@ export async function GET() {
   await connectToMongoDb();
 
   try {
-    const listings = await Listing.find();
+    const { userId } = auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const listings = await Listing.find({ clerkId: userId });
     return NextResponse.json(
       { success: true, data: listings },
       { status: 200 }

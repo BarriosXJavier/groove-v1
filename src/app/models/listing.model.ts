@@ -31,10 +31,10 @@ const ListingSchema = new Schema(
         message: "You can upload up to 5 images",
       },
     },
-    // clerkId: {
-    //   type: String,
-    //   required: [true, "Clerk ID is required"], // Ensure clerkId is required
-    // },
+    clerkId: {
+      type: String,
+      required: [true, "Clerk ID is required"], // Ensure clerkId is required
+    },
   },
   { timestamps: true }
 );

@@ -1,9 +1,9 @@
 import { CreateListingForm } from '@/components/shared/create-listing-form.tsx'
 
-const page = () => {
+const ListingForm = () => {
   return (
     <CreateListingForm />
   )
 }
 
-export default page
+export default ListingForm
