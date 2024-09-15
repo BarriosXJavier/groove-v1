@@ -4,20 +4,11 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import {
-  LayoutGridIcon,
-  PencilIcon,
-  TrashIcon,
-  MenuIcon,
-  PlusCircleIcon,
-} from "lucide-react";
-import { useState } from "react";
+import { LayoutGridIcon, CheckIcon, PencilIcon, TrashIcon } from "lucide-react";
 
-export default function DashboardPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
+const DashboardPage = () => {
   const user = {
     name: "John Doe",
     avatar: "/placeholder-user.jpg",
@@ -117,38 +108,22 @@ export default function DashboardPage() {
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <Card
-              key={listing.id}
-              className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="relative pt-[66.67%] bg-gray-200">
-                <Image
-                  src="/placeholder.svg"
-                  alt={listing.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
-                />
-              </div>
-              <CardContent className="p-4 flex-grow bg-white">
-                <h3 className="text-lg text-gray-800 font-medium mb-2">
-                  {listing.title}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
+            <Card key={listing.id}>
+              <Image
+                src="/placeholder.svg"
+                alt={listing.title}
+                width={300}
+                height={200}
+                className="w-full h-48 object-cover rounded-t-lg"
+                style={{ aspectRatio: "300/200", objectFit: "cover" }}
+              />
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold">{listing.title}</h3>
+                <p className="text-sm text-muted-foreground">
                   {listing.description}
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold text-blue-600">
-                    ${listing.price}
-                  </span>
-                  <Badge
-                    variant={
-                      listing.status === "active" ? "secondary" : "outline"
-                    }
-                    className="capitalize"
-                  >
-                    {listing.status}
-                  </Badge>
+                <div className="flex items-center justify-between mt-4">
+                  <span className="text-lg font-bold">${listing.price}</span>
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end gap-2 p-4 bg-gray-50">
@@ -176,3 +151,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+export default DashboardPage;
