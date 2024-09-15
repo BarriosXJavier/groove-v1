@@ -26,18 +26,40 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (user) {
-      fetch(`/api/listings`)
+      fetch(`/api/listing`)
         .then((response) => response.json())
         .then((data) => setListings(data.data)); // Ensure proper typing here
     }
   }, [user]);
 
-  const handleDelete = async (id: string) => {
-    await fetch(`/api/listings/${id}`, { method: "DELETE" });
-    setListings((prevListings) =>
-      prevListings.filter((listing) => listing._id !== id)
-    );
-  };
+ const handleDelete = async (id: string) => {
+   try {
+     const response = await fetch(`/api/listing/${id}`, {
+       method: "DELETE",
+       headers: {
+         "Content-Type": "application/json",
+       },
+     });
+
+     if (!response.ok) {
+       const errorText = await response.text(); // Get error details
+       throw new Error(`Failed to delete listing: ${errorText}`);
+     }
+
+     const result = await response.json();
+
+     if (result.success) {
+       setListings((prevListings) =>
+         prevListings.filter((listing) => listing._id !== id)
+       );
+     } else {
+       console.error(result.error);
+     }
+   } catch (error) {
+     console.error("Error deleting listing", error);
+   }
+ };
+
 
   return (
     <div className="flex min-h-screen bg-muted">

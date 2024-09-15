@@ -3,7 +3,7 @@ import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
 import { auth } from "@clerk/nextjs/server";
 
-// Handle POST request for creating a new listing
+// POST method (for creating listings)
 export async function POST(req: Request) {
   await connectToMongoDb();
 
@@ -20,13 +20,17 @@ export async function POST(req: Request) {
     const { title, price, description, location, tags, images } =
       await req.json();
 
+    const processedTags = tags
+      ? tags.split(",").map((tag: string) => tag.trim())
+      : [];
+
     const newListing = new Listing({
       clerkId: userId,
       title,
       price,
       description,
       location,
-      tags: tags.split(",").map((tag: string) => tag.trim()),
+      tags: processedTags,
       images,
     });
 
@@ -45,7 +49,7 @@ export async function POST(req: Request) {
   }
 }
 
-// Handle GET requests for fetching listings
+// GET method (for fetching listings)
 export async function GET() {
   await connectToMongoDb();
 
@@ -68,6 +72,53 @@ export async function GET() {
     console.error("Error fetching listings:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch listings" },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE method (for deleting listings)
+export async function DELETE(req: Request) {
+  await connectToMongoDb();
+
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Extract listing ID from URL
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop(); // Extract ID from the URL path
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Listing ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const result = await Listing.deleteOne({ _id: id, clerkId: userId });
+
+    if (result.deletedCount === 1) {
+      return NextResponse.json(
+        { success: true, message: "Listing deleted successfully" },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { success: false, error: "Listing not found" },
+        { status: 404 }
+      );
+    }
+  } catch (error) {
+    console.error("Error deleting listing:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete listing" },
       { status: 500 }
     );
   }

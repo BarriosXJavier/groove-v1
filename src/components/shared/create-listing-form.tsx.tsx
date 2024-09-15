@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { MapPinIcon, TagIcon, DollarSignIcon } from "lucide-react";
-import Image from "next/image";
 
 // Define the Zod schema
 const schema = z.object({
@@ -49,7 +48,7 @@ export function CreateListingForm() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const response = await fetch("/api/listings", {
+      const response = await fetch("/api/listing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +125,7 @@ export function CreateListingForm() {
                     key={index}
                     className="relative w-32 h-32 border border-gray-300 rounded-lg overflow-hidden"
                   >
-                    <Image
+                    <img
                       src={url}
                       alt={`Image ${index + 1}`}
                       className="object-cover w-full h-full"

@@ -21,7 +21,7 @@ export default function AllListings() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch("/api/listings");
+        const response = await fetch("/api/listing");
         if (!response.ok) {
           throw new Error("Failed to fetch listings");
         }
