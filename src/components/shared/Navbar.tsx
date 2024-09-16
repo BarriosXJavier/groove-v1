@@ -2,12 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Bookmark, Search } from "lucide-react";
+import { Menu, X, Bookmark } from "lucide-react";
 import { navMenuItems } from "../../../data";
 import { Button } from "../ui/button";
 import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 
-// Define the shape of a navigation menu item
 interface NavMenuItem {
   name: string;
   href: string;
@@ -32,7 +31,7 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          <div className="hidden lg:flex lg:space-x-8">
+          <div className="hidden lg:flex lg:space-x-5">
             {navMenuItems.map((item: NavMenuItem) => (
               <Link
                 key={item.name}
@@ -48,12 +47,15 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="hidden lg:flex lg:items-center space-x-4">
+            <Link href="/dashboard">Dashboard</Link>
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               {isSignedIn ? <UserButton /> : <SignInButton />}
             </Button>
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <Bookmark className="h-5 w-5 lg:h-6 lg:w-6" />
-            </Button>
+            {/* <Link href="/mybookmarks">
+              <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <Bookmark className="h-5 w-5 lg:h-6 lg:w-6" />
+              </Button>
+            </Link> */}
           </div>
 
           {/* Hamburger Menu Button for Mobile */}
@@ -96,9 +98,7 @@ const Navbar: React.FC = () => {
         </div>
         <div className="pt-4 pb-3 border-t border-gray-200">
           <div className="flex items-center px-4 space-x-4">
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <Search className="h-5 w-5" />
-            </Button>
+            <Link href="/dashboard">Dashboard</Link>
             {isSignedIn ? <UserButton /> : <SignInButton />}
             <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               <Bookmark className="h-5 w-5" />

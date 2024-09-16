@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, KeyboardEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,37 +16,63 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MapPinIcon, TagIcon, DollarSignIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 // Define the Zod schema
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
-  price: z.number().min(0.01, { message: "Price must be greater than 0" }),
+  price: z.coerce
+    .number()
+    .min(0.01, { message: "Price must be greater than 0" }),
   description: z
     .string()
     .max(250, { message: "Description can't exceed 250 characters" }),
   location: z.string().min(1, { message: "Location is required" }),
-  tags: z.string().optional(),
+  tags: z.string().optional(), // Tags field
   images: z
     .array(z.string().url())
     .max(5, { message: "You can enter up to 5 image URLs" }),
+  category: z.enum(
+    [
+      "Living Room",
+      "Dining Room",
+      "Bedroom",
+      "Rugs & Carpets",
+      "Lighting",
+      "Home Décor",
+      "Movers",
+    ],
+    { message: "Please select a category" }
+  ),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export function CreateListingForm() {
   const [urls, setUrls] = useState<string[]>([]);
+  const { toast } = useToast();
 
   const {
     register,
     handleSubmit,
     setValue,
+    getValues, // Get current values
+    reset, // For resetting form
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log("Submitted Data:", data); // Check if category is present
+
     try {
       const response = await fetch("/api/listing", {
         method: "POST",
@@ -65,8 +91,26 @@ export function CreateListingForm() {
 
       const responseData = await response.json();
       console.log("Listing created successfully", responseData);
+
+      // Trigger success toast
+      toast({
+        title: "Success",
+        description: "Listing created successfully!",
+        variant: "success" as "default" | "destructive",
+      });
+
+      // Clear the form after successful submission
+      reset();
+      setUrls([]); // Clear the image URLs
     } catch (error) {
       console.error("Error creating listing", error);
+
+      // Trigger error toast
+      toast({
+        title: "Error",
+        description: "Failed to create listing.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -101,103 +145,38 @@ export function CreateListingForm() {
             Fill out the details below to list your item for sale.
           </CardDescription>
         </CardHeader>
+
         <CardContent className="grid gap-6 pt-6">
-          {/* Image URLs */}
-          <div className="space-y-2">
-            <Label htmlFor="images" className="text-lg font-semibold">
-              Image URLs
-            </Label>
-            <div className="flex flex-col gap-4">
-              <Input
-                id="images"
-                placeholder="Enter image URLs and press Enter"
-                className="text-lg"
-                onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleUrlChange(e as unknown as ChangeEvent<HTMLInputElement>);
-                  }
-                }}
-              />
-              <div className="flex flex-wrap gap-4">
-                {urls.map((url, index) => (
-                  <div
-                    key={index}
-                    className="relative w-32 h-32 border border-gray-300 rounded-lg overflow-hidden"
-                  >
-                    <img
-                      src={url}
-                      alt={`Image ${index + 1}`}
-                      className="object-cover w-full h-full"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full"
-                      onClick={() => removeUrl(index)}
-                    >
-                      <span className="text-white">×</span>
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              {errors.images && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.images.message}
-                </p>
-              )}
-            </div>
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              placeholder="Enter the listing title"
+              {...register("title")}
+            />
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title.message}</p>
+            )}
           </div>
 
-          {/* Title and Price */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="title" className="text-lg font-semibold">
-                Title
-              </Label>
-              <Input
-                id="title"
-                placeholder="Enter a catchy title"
-                className="text-lg"
-                {...register("title")}
-              />
-              {errors.title && (
-                <p className="text-red-500 text-sm">{errors.title.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="price" className="text-lg font-semibold">
-                Price
-              </Label>
-              <div className="relative">
-                <DollarSignIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input
-                  id="price"
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  className="pl-10 text-lg"
-                  {...register("price", { valueAsNumber: true })}
-                />
-              </div>
-              {errors.price && (
-                <p className="text-red-500 text-sm">{errors.price.message}</p>
-              )}
-            </div>
+          <div>
+            <Label htmlFor="price">Price</Label>
+            <Input
+              id="price"
+              type="number"
+              placeholder="Enter the price"
+              {...register("price")}
+            />
+            {errors.price && (
+              <p className="text-red-500 text-sm">{errors.price.message}</p>
+            )}
           </div>
 
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-lg font-semibold">
-              Description
-            </Label>
+          <div>
+            <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              rows={5}
-              placeholder="Describe your item in detail"
-              className="text-lg resize-none"
+              placeholder="Enter a description"
               {...register("description")}
             />
             {errors.description && (
@@ -207,44 +186,83 @@ export function CreateListingForm() {
             )}
           </div>
 
-          {/* Location and Tags */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="location" className="text-lg font-semibold">
-                Location
-              </Label>
-              <div className="relative">
-                <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input
-                  id="location"
-                  placeholder="Enter a location"
-                  className="pl-10 text-lg"
-                  {...register("location")}
-                />
-              </div>
-              {errors.location && (
-                <p className="text-red-500 text-sm">
-                  {errors.location.message}
-                </p>
-              )}
-            </div>
+          <div>
+            <Label htmlFor="location">Location</Label>
+            <Input
+              id="location"
+              placeholder="Enter the location"
+              {...register("location")}
+            />
+            {errors.location && (
+              <p className="text-red-500 text-sm">{errors.location.message}</p>
+            )}
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="tags" className="text-lg font-semibold">
-                Tags
-              </Label>
-              <div className="relative">
-                <TagIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input
-                  id="tags"
-                  placeholder="Add tags separated by commas"
-                  className="pl-10 text-lg"
-                  {...register("tags")}
-                />
-              </div>
+          <div>
+            <Label>Category</Label>
+            <Select
+              onValueChange={(value) => {
+                setValue("category", value as FormValues["category"]);
+                console.log(getValues("category")); 
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Living Room">Living Room</SelectItem>
+                <SelectItem value="Dining Room">Dining Room</SelectItem>
+                <SelectItem value="Bedroom">Bedroom</SelectItem>
+                <SelectItem value="Rugs & Carpets">Rugs & Carpets</SelectItem>
+                <SelectItem value="Lighting">Lighting</SelectItem>
+                <SelectItem value="Home Décor">Home Décor</SelectItem>
+                <SelectItem value="Movers">Movers</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="tags">Tags (Optional)</Label>
+            <Input
+              id="tags"
+              placeholder="Enter comma-separated tags (optional)"
+              {...register("tags")}
+            />
+            {errors.tags && (
+              <p className="text-red-500 text-sm">{errors.tags.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="imageUrl">Add Image URLs (max 5)</Label>
+            <Input
+              id="imageUrl"
+              placeholder="Enter an image URL"
+              onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+              onBlur={handleUrlChange}
+            />
+            {errors.images && (
+              <p className="text-red-500 text-sm">{errors.images.message}</p>
+            )}
+            <div className="flex flex-wrap mt-2">
+              {urls.map((url, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <span>{url}</span>
+                  <Button
+                    variant="destructive"
+                    onClick={() => removeUrl(index)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>
+
         <CardFooter className="bg-gray-50 rounded-b-lg">
           <Button
             type="submit"

@@ -9,7 +9,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import { PencilIcon, TrashIcon } from "lucide-react";
 
-// Define the structure of a listing
 interface Listing {
   _id: string;
   title: string;
@@ -22,52 +21,52 @@ interface Listing {
 
 export default function DashboardPage() {
   const { user } = useUser();
-  const [listings, setListings] = useState<Listing[]>([]); // Type the state
+  const [listings, setListings] = useState<Listing[]>([]);
 
   useEffect(() => {
     if (user) {
       fetch(`/api/listing`)
         .then((response) => response.json())
-        .then((data) => setListings(data.data)); // Ensure proper typing here
+        .then((data) => setListings(data.data));
     }
   }, [user]);
 
- const handleDelete = async (id: string) => {
-   try {
-     const response = await fetch(`/api/listing/${id}`, {
-       method: "DELETE",
-       headers: {
-         "Content-Type": "application/json",
-       },
-     });
+  const handleDelete = async (delete_id: string) => {
+    try {
+      const response = await fetch(`/api/listing/${delete_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-     if (!response.ok) {
-       const errorText = await response.text(); // Get error details
-       throw new Error(`Failed to delete listing: ${errorText}`);
-     }
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to delete listing: ${errorText}`);
+      }
 
-     const result = await response.json();
+      const result = await response.json();
 
-     if (result.success) {
-       setListings((prevListings) =>
-         prevListings.filter((listing) => listing._id !== id)
-       );
-     } else {
-       console.error(result.error);
-     }
-   } catch (error) {
-     console.error("Error deleting listing", error);
-   }
- };
-
+      if (result.success) {
+        setListings((prevListings) =>
+          prevListings.filter((listing) => listing._id !== delete_id)
+        );
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error deleting listing", error);
+    }
+  };
 
   return (
-    <div className="flex min-h-screen bg-muted">
-      <aside className="bg-background border-r w-64 p-6">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-muted">
+      {/* Sidebar */}
+      <aside className="bg-background border-b lg:border-r lg:w-64 w-full p-6 lg:fixed lg:h-screen">
         <div className="flex items-center gap-4 mb-8">
           <Avatar className="w-10 h-10">
             <AvatarImage
-              src={user?.imageUrl || "/placeholder-user.jpg"} // Clerk user's imageUrl
+              src={user?.imageUrl || "/placeholder-user.jpg"}
               alt={user?.firstName || "User"}
             />
             <AvatarFallback>
@@ -76,18 +75,20 @@ export default function DashboardPage() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-lg font-medium">
               {user?.firstName} {user?.lastName}
             </h2>
-            <p className="text-sm text-muted-foreground">Furniture Seller</p>
+            {/* <p className="text-sm text-muted-foreground">Furniture Seller</p> */}
           </div>
         </div>
         {/* Sidebar navigation */}
         <nav className="space-y-2">{/* Sidebar Links */}</nav>
       </aside>
-      <main className="flex-1 p-8">
+
+      {/* Main content */}
+      <main className="flex-1 lg:ml-64 p-8 w-full">
         <header className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Furniture Listings</h1>
+          <h1 className="text-xl font-medium">My Listings</h1>
 
           <Button>
             <Link href="../dashboard/createListingForm">Create Listing</Link>

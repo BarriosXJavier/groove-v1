@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
@@ -17,12 +18,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const { title, price, description, location, tags, images } =
+    const { title, price, description, location, tags, images, category } =
       await req.json();
 
-    const processedTags = tags
-      ? tags.split(",").map((tag: string) => tag.trim())
-      : [];
+    const processedTags = Array.isArray(tags)
+      ? tags
+      : tags.split(",").map((tag: string) => tag.trim());
+
+    const selectedCategory = category || "Other";
 
     const newListing = new Listing({
       clerkId: userId,
@@ -32,9 +35,11 @@ export async function POST(req: Request) {
       location,
       tags: processedTags,
       images,
+      category: selectedCategory,
     });
 
-    await newListing.save();
+   
+    await newListing.save()
 
     return NextResponse.json(
       { success: true, data: newListing },
@@ -48,6 +53,7 @@ export async function POST(req: Request) {
     );
   }
 }
+
 
 // GET method (for fetching listings)
 export async function GET() {
@@ -72,53 +78,6 @@ export async function GET() {
     console.error("Error fetching listings:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch listings" },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE method (for deleting listings)
-export async function DELETE(req: Request) {
-  await connectToMongoDb();
-
-  try {
-    const { userId } = auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    // Extract listing ID from URL
-    const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // Extract ID from the URL path
-
-    if (!id) {
-      return NextResponse.json(
-        { success: false, error: "Listing ID is required" },
-        { status: 400 }
-      );
-    }
-
-    const result = await Listing.deleteOne({ _id: id, clerkId: userId });
-
-    if (result.deletedCount === 1) {
-      return NextResponse.json(
-        { success: true, message: "Listing deleted successfully" },
-        { status: 200 }
-      );
-    } else {
-      return NextResponse.json(
-        { success: false, error: "Listing not found" },
-        { status: 404 }
-      );
-    }
-  } catch (error) {
-    console.error("Error deleting listing:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete listing" },
       { status: 500 }
     );
   }

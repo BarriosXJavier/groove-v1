@@ -7,7 +7,7 @@ import ProductCard from "@/components/shared/ProductCard";
 interface Listing {
   _id: string;
   title: string;
-  price?: number; // Mark as optional
+  price: number;
   description: string;
   location: string;
   tags: string[];
@@ -51,7 +51,7 @@ export default function AllListings() {
         <ProductCard
           key={listing._id}
           title={listing.title}
-          price={listing.price || 0} // Handle undefined price
+          price={listing.price}
           imageUrl={listing.images[0] || "/placeholder.svg"} // Handle empty images
           location={listing.location}
         />

@@ -23,17 +23,33 @@ const ListingSchema = new Schema(
     },
     tags: {
       type: [String],
+      default: [], // Default value is an empty array
     },
     images: {
-      type: [String], // Array of image URLs
+      type: [String],
       validate: {
         validator: (v: string[]) => v.length <= 5,
         message: "You can upload up to 5 images",
       },
     },
+    category: {
+      type: String,
+      required: [true, "Category is required"],
+      enum: [
+        "Living Room",
+        "Dining Room",
+        "Bedroom",
+        "Rugs & Carpets",
+        "Lighting",
+        "Home Décor",
+        "Movers",
+      ],
+
+      default: "Other",
+    },
     clerkId: {
       type: String,
-      required: [true, "Clerk ID is required"], // Ensure clerkId is required
+      required: [true, "Clerk ID is required"],
     },
   },
   { timestamps: true }
