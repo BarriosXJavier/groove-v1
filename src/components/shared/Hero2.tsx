@@ -24,7 +24,7 @@ const Hero2 = () => {
           words={title}
           className={cn(
             "text-4xl sm:text-5xl md:text-6xl font-semibold mb-5",
-            "text-purple-400"
+            "text-purple-300"
           )}
         />
         <TextGenerateEffect

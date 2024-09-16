@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 import ProductCard from "@/components/shared/ProductCard";
+import { ColorRing } from "react-loader-spinner";
 
 interface Listing {
   _id: string;
@@ -38,11 +39,23 @@ export default function AllListings() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex">
+        <div className="m-auto">
+          <ColorRing />
+        </div>
+      </div>
+    );
   }
 
   if (listings.length === 0) {
-    return <div>No listings available</div>;
+    return (
+      <div className="flex my-8">
+        <div className="mx-auto">
+          <p className="text-lg text-center">No listings available right now. Please check back later</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -52,8 +65,10 @@ export default function AllListings() {
           key={listing._id}
           title={listing.title}
           price={listing.price}
-          imageUrl={listing.images[0] || "/placeholder.svg"} // Handle empty images
+          imageUrl={listing.images[0] || "/placeholder.svg"}
           location={listing.location}
+          productId={listing._id}
+          userId={""}
         />
       ))}
     </div>

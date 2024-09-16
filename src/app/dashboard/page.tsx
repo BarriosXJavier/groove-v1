@@ -78,7 +78,7 @@ export default function DashboardPage() {
             <h2 className="text-lg font-medium">
               {user?.firstName} {user?.lastName}
             </h2>
-            {/* <p className="text-sm text-muted-foreground">Furniture Seller</p> */}
+
           </div>
         </div>
         {/* Sidebar navigation */}

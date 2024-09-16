@@ -5,7 +5,7 @@ import ShimmerButton from "../ui/shimmer-button";
 
 interface Listing {
   _id: string;
-  name: string;
+  title: string;
 }
 
 const SearchInput = () => {
@@ -40,13 +40,13 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col items-center px-4 py-3 my-8 border-b border-[#333] focus-within:border-gray-800 overflow-hidden max-w-md mx-auto font-[sans-serif]">
+    <div className="bg-white flex flex-col items-center px-4 py-2 my-10 border-b border-[#333] focus-within:border-gray-800 overflow-hidden max-w-md mx-auto font-[sans-serif]">
       <div className="flex w-full">
         <input
           type="text"
           value={searchQuery}
           onChange={handleInputChange}
-          className="w-full outline-none text-sm"
+          className="w-full outline-none text-lg"
           placeholder="Enter keywords"
         />
         <ShimmerButton
@@ -62,12 +62,12 @@ const SearchInput = () => {
           <ul>
             {searchResults.map((item) => (
               <li key={item._id} className="py-2 border-b">
-                {item.name}
+                {item.title}
               </li>
             ))}
           </ul>
         ) : hasSearched && searchResults.length === 0 ? (
-          <p>No results found.</p>
+          <p className="text-center text-lg">{`No results found for "${searchQuery}".`}.</p>
         ) : null}
       </div>
     </div>

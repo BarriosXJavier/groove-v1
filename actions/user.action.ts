@@ -8,6 +8,8 @@ import { Document } from "mongoose";
 interface IUser extends Document {
   clerkId: string;
   email: string;
+  firstName: string;
+  lastName: string;
   create_At: Date;
 }
 
@@ -15,6 +17,8 @@ interface IUser extends Document {
 interface CreateUserData {
   clerkId: string;
   email: string;
+  firstName: string;
+  lastName: string;
 }
 
 // Create a new user

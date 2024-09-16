@@ -11,8 +11,8 @@ import { NextResponse } from "next/server";
 // Define an interface for the Clerk webhook event payload (user.created)
 interface ClerkWebhookUserCreatedEvent {
   email_addresses: { email_address: string }[];
-  first_name?: string;
-  last_name?: string;
+  first_name: string;
+  last_name: string;
   username?: string;
 }
 
@@ -90,8 +90,8 @@ export async function POST(req: Request) {
         clerkId: id,
         email: email,
         username: username || "",
-        firstName: first_name || "",
-        lastName: last_name || "",
+        firstName: first_name,
+        lastName: last_name,
       };
 
       const newUser = await createUser(user);
