@@ -1,9 +1,12 @@
+
 import { CreateListingForm } from '@/components/shared/create-listing-form.tsx'
 
-const ListingForm = () => {
+const ListingForm: React.FC = () => {
   return (
-    <CreateListingForm />
-  )
+    <div>
+      <CreateListingForm />
+    </div>
+  );
 }
 
 export default ListingForm

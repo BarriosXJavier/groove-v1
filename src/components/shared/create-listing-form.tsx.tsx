@@ -137,13 +137,15 @@ export function CreateListingForm() {
   return (
     <Card className="max-w-4xl mx-auto shadow-lg">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardHeader className="space-y-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <CardHeader className="space-y-1 bg-stone-800 text-white rounded-t-lg">
           <CardTitle className="text-3xl font-bold">
             Create a New Listing
           </CardTitle>
-          <CardDescription className="text-blue-100">
-            Fill out the details below to list your item for sale.
-          </CardDescription>
+        
+            <CardDescription className="text-blue-100">
+              Fill out the details below to list your item for sale.
+            </CardDescription>
+          
         </CardHeader>
 
         <CardContent className="grid gap-6 pt-6">
@@ -203,7 +205,7 @@ export function CreateListingForm() {
             <Select
               onValueChange={(value) => {
                 setValue("category", value as FormValues["category"]);
-                console.log(getValues("category")); 
+                console.log(getValues("category"));
               }}
             >
               <SelectTrigger>
