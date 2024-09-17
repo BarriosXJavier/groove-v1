@@ -23,7 +23,7 @@ const ListingSchema = new Schema(
     },
     tags: {
       type: [String],
-      default: [], // Default value is an empty array
+      default: [],
     },
     images: {
       type: [String],

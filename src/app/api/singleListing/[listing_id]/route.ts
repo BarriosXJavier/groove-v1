@@ -1,16 +1,25 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
 
 export async function GET(
   req: Request,
-  { params }: { params: { listingId: string } }
+  { params }: { params: { listing_id: string } }
 ) {
   await connectToMongoDb();
 
   try {
-    const { listingId } = params; 
-    const listing = await Listing.findById(listingId);
+    const { listing_id } = params;
+
+    if (!mongoose.Types.ObjectId.isValid(listing_id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid listing ID format" },
+        { status: 400 }
+      );
+    }
+
+    const listing = await Listing.findById(listing_id).exec();
 
     if (!listing) {
       return NextResponse.json(

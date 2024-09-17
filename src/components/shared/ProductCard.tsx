@@ -13,7 +13,7 @@ interface ProductCardProps {
   imageUrl: string;
   location: string;
   listingId: string;
-  userId: string; // Clerk user ID
+  userId?: string; // Clerk user ID
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -69,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <Link href={`/listing/${listingId}`}>
+    <Link href={`/listing/${listingId}`} target="_blank">
       <Card className="w-full max-w-sm bg-background shadow-lg rounded-lg overflow-hidden cursor-pointer">
         <div className="relative">
           <Image

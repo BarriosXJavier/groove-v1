@@ -68,7 +68,7 @@ export default function AllListings() {
           imageUrl={listing.images[0] || "/placeholder.svg"}
           location={listing.location}
           listingId={listing._id}
-          userId={""}
+          userId={listing._id}
         />
       ))}
     </div>
