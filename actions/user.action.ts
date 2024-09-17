@@ -41,9 +41,6 @@ export async function createUser(
   }
 }
 
-
-
-// Find a user by their Clerk ID
 export async function findUserByClerkId(
   clerkId: string
 ): Promise<IUser | null> {

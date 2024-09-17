@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const bookmarkSchema = new mongoose.Schema({
   userId: { type: String, required: true }, // Clerk user ID
-  productId: {
+  listingId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,

@@ -67,7 +67,7 @@ export default function AllListings() {
           price={listing.price}
           imageUrl={listing.images[0] || "/placeholder.svg"}
           location={listing.location}
-          productId={listing._id}
+          listingId={listing._id}
           userId={""}
         />
       ))}
