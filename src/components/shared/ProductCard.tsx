@@ -87,7 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               isBookmarked ? "text-primary" : "text-gray-500"
             }`}
             onClick={(e) => {
-              e.preventDefault(); // Prevents the link from triggering when clicking the bookmark button
+              e.preventDefault();
               handleBookmark();
             }}
           >

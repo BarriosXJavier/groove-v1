@@ -11,7 +11,7 @@ import {
 interface Listing {
   title: string;
   price: number;
-  images: string[]; // Array of image URLs
+  images: string[];
   location: string;
   description: string;
   tags: string[];
@@ -51,7 +51,7 @@ const ListingPage = async ({ params }: ListingPageProps) => {
 
   return (
     <div className="container mx-auto p-6 max-w-3xl">
-      <h1 className="text-2xl font-bold mb-4 text-center">{listing.title}</h1>
+      <h1 className="text-lg font-medium mb-4 text-center">{listing.title}</h1>
       {listing.images.length > 0 ? (
         <div className="w-full max-w-xl mx-auto">
           <Carousel className="w-full">
@@ -85,7 +85,7 @@ const ListingPage = async ({ params }: ListingPageProps) => {
         <p className="mt-2 text-gray-600">Location: {listing.location}</p>
         <p className="mt-4 text-gray-800">{listing.description}</p>
         <div className="mt-4">
-          <strong>Tags:</strong>
+          <p>Tags:</p>
           <ul className="list-none p-0 mt-2 flex flex-wrap justify-center gap-2">
             {listing.tags.map((tag, index) => (
               <li

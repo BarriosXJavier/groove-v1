@@ -18,7 +18,7 @@ interface NavMenuItem {
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -60,9 +60,15 @@ const Navbar: React.FC = () => {
             >
               Dashboard
             </Link>
-            <Button className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              {isSignedIn ? <UserButton /> : <SignInButton />}
-            </Button>
+            <div className="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              {!isLoaded ? (
+                <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse"></div>
+              ) : isSignedIn ? (
+                <UserButton />
+              ) : (
+                <SignInButton />
+              )}
+            </div>
           </div>
 
           {/* Hamburger Menu Button for Mobile */}
@@ -112,8 +118,13 @@ const Navbar: React.FC = () => {
             >
               Dashboard
             </Link>
-            {isSignedIn ? <UserButton /> : <SignInButton />}
-         
+            {!isLoaded ? (
+              <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse"></div>
+            ) : isSignedIn ? (
+              <UserButton />
+            ) : (
+              <SignInButton />
+            )}
           </div>
         </div>
       </div>

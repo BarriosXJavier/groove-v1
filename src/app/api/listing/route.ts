@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
 
 // GET method (for fetching listings)
-export async function GET() {
+export async function GET(req: Request) {
   await connectToMongoDb();
 
   try {
@@ -69,9 +69,28 @@ export async function GET() {
       );
     }
 
-    const listings = await Listing.find({ clerkId: userId });
+    // Get the search parameters for pagination
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "6", 10); // Default 6 listings per page
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated listings
+    const totalListings = await Listing.countDocuments({ clerkId: userId });
+    const listings = await Listing.find({ clerkId: userId })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalListings / limit);
+
     return NextResponse.json(
-      { success: true, data: listings },
+      {
+        success: true,
+        data: listings,
+        currentPage: page,
+        totalPages: totalPages,
+        totalListings: totalListings,
+      },
       { status: 200 }
     );
   } catch (error) {

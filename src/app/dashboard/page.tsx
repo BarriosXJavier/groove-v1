@@ -78,7 +78,6 @@ export default function DashboardPage() {
             <h2 className="text-lg font-medium">
               {user?.firstName} {user?.lastName}
             </h2>
-
           </div>
         </div>
         {/* Sidebar navigation */}
@@ -97,14 +96,14 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {listings.map((listing) => (
             <Card key={listing._id}>
-              <Image
-                src={listing.images?.[0] || "/placeholder.svg"} // Use the first image or a placeholder
-                alt={listing.title}
-                width={300}
-                height={200}
-                className="w-full h-48 object-cover rounded-t-lg"
-                style={{ aspectRatio: "300/200", objectFit: "cover" }}
-              />
+              <div className="w-full h-48 relative">
+                <Image
+                  src={listing.images?.[0] || "/placeholder.svg"}
+                  alt={listing.title}
+                  fill
+                  className="object-cover rounded-t-lg"
+                />
+              </div>
               <CardContent className="p-4">
                 <h3 className="text-lg font-semibold">{listing.title}</h3>
                 <p className="text-sm text-muted-foreground">
