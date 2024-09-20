@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { BookmarkIcon } from "lucide-react";
-import Link from "next/link"; // Import Next.js Link
+import Link from "next/link";
 
 interface ProductCardProps {
   title: string;
@@ -13,6 +13,7 @@ interface ProductCardProps {
   imageUrl: string;
   location: string;
   listingId: string;
+  category: string;
   userId?: string; // Clerk user ID
 }
 
@@ -30,7 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     const fetchBookmarkStatus = async () => {
       try {
         const res = await fetch(
-          `/api/bookmarks?userId=${userId}&listingId=${listingId}`
+          `/api/bookmarks?userId=${userId}&listingId=${listingId}`,
         );
         const data = await res.json();
         setIsBookmarked(data.isBookmarked);

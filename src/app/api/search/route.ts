@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -8,21 +8,27 @@ export async function GET(request: Request) {
 
   if (!query) {
     return NextResponse.json(
-      { error: "Missing search query" },
+      { error: "No search query provided" },
       { status: 400 }
     );
   }
 
   try {
-    await connectToMongoDb(); 
-    const listings = await Listing.find({
-      name: { $regex: query, $options: "i" },
-    });
+    await connectToMongoDb();
+    const searchResults = await Listing.find({
+      title: { $regex: query, $options: "i" }, // Case-insensitive search
+    }).lean();
 
-    return NextResponse.json(listings, { status: 200 });
+    const formattedResults = searchResults.map((result) => ({
+      ...result,
+      listingId: result._id.toString(),
+    }));
+
+    return NextResponse.json({ results: formattedResults });
   } catch (error) {
+    console.error("Error fetching search results:", error);
     return NextResponse.json(
-      { error: "Error fetching listings" },
+      { error: "Error fetching search results" },
       { status: 500 }
     );
   }

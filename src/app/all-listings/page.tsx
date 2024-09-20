@@ -26,7 +26,7 @@ export default function AllListings() {
       try {
         setLoading(true);
         const response = await fetch(
-          `/api/listing?page=${currentPage}&limit=${listingsPerPage}`
+          `/api/listing?page=${currentPage}&limit=${listingsPerPage}`,
         );
         if (!response.ok) {
           throw new Error("Failed to fetch listings");

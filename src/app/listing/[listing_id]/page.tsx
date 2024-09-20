@@ -15,6 +15,7 @@ interface Listing {
   location: string;
   description: string;
   tags: string[];
+  category: string;
 }
 
 async function getListing(listingId: string): Promise<Listing | null> {
@@ -84,6 +85,7 @@ const ListingPage = async ({ params }: ListingPageProps) => {
         <p className="text-lg text-gray-600">Price: Ksh {listing.price}</p>
         <p className="mt-2 text-gray-600">Location: {listing.location}</p>
         <p className="mt-4 text-gray-800">{listing.description}</p>
+        <p className="mt-4 text-gray-600">{listing.category}</p>
         <div className="mt-4">
           <p>Tags:</p>
           <ul className="list-none p-0 mt-2 flex flex-wrap justify-center gap-2">

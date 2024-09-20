@@ -1,77 +1,92 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
-import ShimmerButton from "../ui/shimmer-button";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Loader2, SearchIcon } from "lucide-react";
+import ProductCard from "./ProductCard";
 
-interface Listing {
-  _id: string;
+interface SearchResult {
   title: string;
+  price: number;
+  imageUrl: string;
+  location: string;
+  listingId: string;
+  category: string;
 }
 
-const SearchInput = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Listing[]>([]);
-  const [hasSearched, setHasSearched] = useState<boolean>(false);
+const SearchComponent = ({ userId }: { userId: string }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-    if (!searchQuery) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm) return;
 
+    setLoading(true);
     try {
-      const res = await fetch(
-        `/api/search?query=${encodeURIComponent(searchQuery)}`
-      );
-      const data: Listing[] = await res.json();
-
-      setHasSearched(true);
-
-      if (res.ok) {
-        setSearchResults(data);
-      } else {
-        console.error("Error:", data);
-      }
+      const response = await fetch(`/api/search?query=${searchTerm}`);
+      const data = await response.json();
+      setResults(data.results || []);
     } catch (error) {
-      console.error("Error searching for furniture:", error);
+      console.error("Error fetching search results:", error);
+      setResults([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-    setHasSearched(false);
-  };
-
   return (
-    <div className="bg-white flex flex-col items-center px-4 py-2 my-10 border-b border-[#333] focus-within:border-gray-800 overflow-hidden max-w-md mx-auto font-[sans-serif]">
-      <div className="flex w-full">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleInputChange}
-          className="w-full outline-none text-lg"
-          placeholder="Enter keywords"
-        />
-        <ShimmerButton
-          onClick={handleSearch}
-        >
-          Search
-        </ShimmerButton>
-      </div>
+    <div className="container mx-auto px-4">
+      <form onSubmit={handleSubmit} className="mb-8">
+        <div className="mx-auto mt-12 relative bg-white max-w-sm flex flex-1 items-center justify-center border py-2 px-2 rounded-2xl gap-2 shadow-2xl focus-within:border-gray-300">
+          <Input
+            type="text"
+            placeholder="Enter keywords"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex border-none shadow-none text-gray-600"
+          />
+          <Button type="submit" disabled={loading} className="outline-none">
+            {loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <SearchIcon />
+            )}
+          </Button>
+        </div>
+      </form>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="flex justify-center items-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      )}
 
       {/* Search Results */}
-      <div className="mt-4 w-full">
-        {hasSearched && searchResults.length > 0 ? (
-          <ul>
-            {searchResults.map((item) => (
-              <li key={item._id} className="py-2 border-b">
-                {item.title}
-              </li>
-            ))}
-          </ul>
-        ) : hasSearched && searchResults.length === 0 ? (
-          <p className="text-center text-lg">{`No results found for "${searchQuery}".`}.</p>
-        ) : null}
-      </div>
+      {!loading && results.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {results.map((result) => (
+            <ProductCard
+              key={result.listingId}
+              title={result.title}
+              price={result.price}
+              imageUrl={result.imageUrl}
+              location={result.location}
+              listingId={result.listingId}
+              category={result.category}
+              userId={userId} // Clerk user ID
+            />
+          ))}
+        </div>
+      ) : (
+        !loading &&
+        searchTerm && <p className="text-center">No results found</p>
+      )}
     </div>
   );
 };
 
-export default SearchInput;
+export default SearchComponent;

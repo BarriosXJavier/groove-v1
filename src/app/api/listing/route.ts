@@ -1,10 +1,9 @@
-
 import { NextResponse } from "next/server";
 import { connectToMongoDb } from "@/lib/mongodb";
 import Listing from "@/app/models/listing.model";
 import { auth } from "@clerk/nextjs/server";
 
-// POST method (for creating listings)
+// Create listing
 export async function POST(req: Request) {
   await connectToMongoDb();
 
@@ -14,7 +13,7 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -38,22 +37,20 @@ export async function POST(req: Request) {
       category: selectedCategory,
     });
 
-   
-    await newListing.save()
+    await newListing.save();
 
     return NextResponse.json(
       { success: true, data: newListing },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating listing:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create listing" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
-
 
 // GET method (for fetching listings)
 export async function GET(req: Request) {
@@ -65,7 +62,7 @@ export async function GET(req: Request) {
     if (!userId) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -91,13 +88,13 @@ export async function GET(req: Request) {
         totalPages: totalPages,
         totalListings: totalListings,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching listings:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch listings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
