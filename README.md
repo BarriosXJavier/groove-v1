@@ -1,8 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Groove Furniture
 
 ## Getting Started
 
-First, run the development server:
+First, clone this repository and run the development server:
 
 ```bash
 npm run dev
@@ -13,6 +13,10 @@ pnpm dev
 # or
 bun dev
 ```
+
+Note that for this project, I am using Bun although you can use any package manager you prefer.
+
+Also, I use ClerkAuth for authentication in this project. You can sign up for a free account at [ClerkAuth](https://clerk.dev) and create a new project. After creating a new project, you will be given the api key. Create a `.env.local` file in the root of the project and add the key.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
