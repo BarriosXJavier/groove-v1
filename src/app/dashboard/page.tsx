@@ -90,7 +90,7 @@ export default function DashboardPage() {
           <h1 className="text-xl font-medium">My Listings</h1>
 
           <Button>
-            <Link href="../dashboard/createListingForm">Create Listing</Link>
+            <Link href="/dashboard/createListingForm">Create Listing</Link>
           </Button>
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -4,7 +4,6 @@ import User from "@/app/models/user.model";
 import { connectToMongoDb } from "@/lib/mongodb";
 import { Document } from "mongoose";
 
-// Define the interface for the user document
 interface IUser extends Document {
   clerkId: string;
   email: string;
@@ -13,7 +12,6 @@ interface IUser extends Document {
   create_At: Date;
 }
 
-// Shape of the input data
 interface CreateUserData {
   clerkId: string;
   email: string;
@@ -21,7 +19,6 @@ interface CreateUserData {
   lastName: string;
 }
 
-// Create a new user
 export async function createUser(
   userData: CreateUserData
 ): Promise<IUser | null> {

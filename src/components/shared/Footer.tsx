@@ -6,11 +6,11 @@ const Footer = () => {
   return (
     <footer className="bg-[#eeebe7] text-gray-800 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start mb-8 space-y-4 sm:space-y-0">
-          <div className="w-full sm:w-auto">
-            <h3 className="font-medium mb-2 text-lg">KEEP IN TOUCH</h3>
-            <p className="text-sm">
+        {/* Top section responsiveness and styling */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
+          <div className="flex-1">
+            <h3 className="font-medium mb-2 text-lg text-center sm:text-left">KEEP IN TOUCH</h3>
+            <p className="text-sm text-center sm:text-left">
               <Link
                 href="#"
                 className="hover:text-gray-900 transition-colors duration-200"
@@ -19,7 +19,7 @@ const Footer = () => {
               </Link>
             </p>
           </div>
-          <div className="w-full sm:w-auto">
+          <div className="flex-1 text-center sm:text-right">
             <Link
               href="#"
               className="inline-flex items-center text-sm hover:text-gray-900 transition-colors duration-200"
@@ -59,18 +59,13 @@ const Footer = () => {
                   Contact Us
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="hover:underline">
-                  Store Locator
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
-        {/* Bottom section */}
-        <div className="border-t border-gray-300 pt-4 text-xs">
-          <p className="mb-2">© 2024 Groove Furniture. All rights reserved.</p>
-          <ul className="flex flex-wrap space-x-4">
+        {/* Bottom section responsiveness */}
+        <div className="border-t border-gray-300 pt-4 text-xs text-center sm:text-left">
+          <p className="mb-2">&copy; 2024 Groove Furniture. All rights reserved.</p>
+          <ul className="flex flex-wrap justify-center sm:justify-start space-x-4">
             <li>
               <Link href="#" className="hover:underline">
                 Privacy Policy

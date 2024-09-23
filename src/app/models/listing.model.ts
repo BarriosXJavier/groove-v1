@@ -41,7 +41,7 @@ const ListingSchema = new Schema(
         "Bedroom",
         "Rugs & Carpets",
         "Lighting",
-        "Home Décor",
+        "Home Decor",
         "Movers",
       ],
 
