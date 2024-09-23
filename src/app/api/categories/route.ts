@@ -5,13 +5,12 @@ import Listing from "@/app/models/listing.model";
 export async function GET() {
   try {
     await connectToMongoDb();
-
-   
+ 
     const categories = await Listing.aggregate([
       {
         $group: {
           _id: "$category", 
-          imageUrl: { $first: "$images" }, // Get the first image for each category
+          imageUrl: { $first: "$images" },
         },
       },
     ]);

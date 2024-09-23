@@ -15,16 +15,18 @@ interface SearchResult {
   category: string;
 }
 
-const SearchComponent = ({ userId }: { userId: string }) => {
+const SearchComponent = ({ userId }: { userId?: string }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false); // Track if search was submitted
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchTerm) return;
 
     setLoading(true);
+    setHasSearched(true);
     try {
       const response = await fetch(`/api/search?query=${searchTerm}`);
       const data = await response.json();
@@ -66,14 +68,14 @@ const SearchComponent = ({ userId }: { userId: string }) => {
       )}
 
       {/* Search Results */}
-      {!loading && results.length > 0 ? (
+      {!loading && results.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {results.map((result) => (
             <ProductCard
               key={result.listingId}
               title={result.title}
               price={result.price}
-              imageUrl={result.imageUrl}
+              imageUrl={result.imageUrl || ""}
               location={result.location}
               listingId={result.listingId}
               category={result.category}
@@ -81,9 +83,11 @@ const SearchComponent = ({ userId }: { userId: string }) => {
             />
           ))}
         </div>
-      ) : (
-        !loading &&
-        searchTerm && <p className="text-center">No results found</p>
+      )}
+
+      {/* No Results Found */}
+      {!loading && hasSearched && results.length === 0 && (
+        <p className="text-center">No results found</p>
       )}
     </div>
   );

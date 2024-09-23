@@ -1,8 +1,6 @@
 "use client";
 
 import SearchComponent from "@/components/shared/SearchInput";
-// import  CategoriesSection  from "@/components/shared/CategoriesSection"
-
 import AllListings from "./all-listings/page";
 import Hero2 from "@/components/shared/Hero2";
 export default function Home() {

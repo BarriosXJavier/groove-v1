@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const CategoriesSection = () => {
-  const [categories, setCategories] = useState([]);
+interface Category {
+  _id: string;
+  imageUrl: string[];
+}
+
+const CategoriesSection: React.FC = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {

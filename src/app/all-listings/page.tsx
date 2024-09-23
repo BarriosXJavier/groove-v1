@@ -12,6 +12,7 @@ interface Listing {
   location: string;
   tags: string[];
   images: string[];
+  category: string;
 }
 
 export default function AllListings() {
@@ -84,6 +85,7 @@ export default function AllListings() {
             location={listing.location}
             listingId={listing._id}
             userId={listing._id}
+            category={listing.category}
           />
         ))}
       </div>
