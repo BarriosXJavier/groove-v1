@@ -59,11 +59,12 @@ export default function DashboardPage() {
     }
   };
 
+
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-muted">
       {/* Sidebar */}
       <aside className="bg-background border-b lg:border-r lg:w-64 w-full p-6 lg:fixed lg:h-screen">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-2">
           <Avatar className="w-10 h-10">
             <AvatarImage
               src={user?.imageUrl || "/placeholder-user.jpg"}
@@ -76,13 +77,13 @@ export default function DashboardPage() {
           </Avatar>
         </div>
         <div>
-          <h2 className="text-lg font-medium">
+          <h3 className="text-sm font-medium">
             {user?.firstName} {user?.lastName}
-          </h2>
+          </h3>
         </div>
-        <div className="text-medium">
+        <div className="text-sm">
           <p>
-            <strong>Created:</strong>{" "}
+            <span>account created: </span>
             {user?.createdAt
               ? new Date(user.createdAt).toLocaleDateString()
               : "Not available"}
@@ -96,14 +97,13 @@ export default function DashboardPage() {
       <main className="flex-1 lg:ml-64 p-8 w-full">
         <header className="flex items-center justify-between mb-8">
           <h1 className="text-xl font-medium">My Listings</h1>
-
-          <Button>
+          <Button className="bg-slate-900 text-gray-200 rounded-xl hover:bg-slate-600 active:bg-stone-600">
             <Link href="/dashboard/createListingForm">Create Listing</Link>
           </Button>
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <Card key={listing._id}>
+            <Card key={listing._id} className="">
               <div className="w-full h-48 relative">
                 <Image
                   src={listing.images?.[0] || "/placeholder.svg"}
@@ -113,27 +113,36 @@ export default function DashboardPage() {
                 />
               </div>
               <CardContent className="p-4">
-                <h3 className="text-lg font-semibold">{listing.title}</h3>
+                <h3 className="text-lg font-medium">{listing.title}</h3>
                 <p className="text-sm text-muted-foreground">
                   {listing.description}
                 </p>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-lg font-bold">${listing.price}</span>
+                  <span className="text-base font-medium">
+                    Ksh{listing.price}
+                  </span>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end gap-2 p-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => console.log("Edit Listing")}
+              <CardFooter className="flex justify-between gap-2 p-2">
+                {/* edit listing*/}
+                <Link
+                  href={`/dashboard/editListingForm/${listing._id}`}
+                  // target="_blank"
                 >
-                  <PencilIcon className="w-4 h-4 mr-2" />
-                  Edit
-                </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-stone-900 hover:bg-stone-600 active:bg-stone-300 p-4 text-white hover:text-white text-base rounded-lg"
+                  >
+                    <PencilIcon className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                </Link>
                 <Button
                   size="sm"
                   variant="destructive"
                   onClick={() => handleDelete(listing._id)}
+                  className="bg-red-900 hover:bg-red-600 active:bg-red-300 p-4 text-white text-base rounded-sm"
                 >
                   <TrashIcon className="w-4 h-4 mr-2" />
                   Delete

@@ -21,7 +21,7 @@ interface Listing {
 async function getListing(listingId: string): Promise<Listing | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/singleListing/${listingId}`, {
+    const res = await fetch(`${baseUrl}/api/getListing/${listingId}`, {
       cache: "no-store", // Prevent caching for fresh data on each request
     });
     if (!res.ok) {
