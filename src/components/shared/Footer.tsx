@@ -12,7 +12,7 @@ const Footer = () => {
             <h3 className="font-medium mb-2 text-lg text-center sm:text-left">KEEP IN TOUCH</h3>
             <p className="text-sm text-center sm:text-left">
               <Link
-                href="#"
+                href="/footer/subscribe"
                 className="hover:text-gray-900 transition-colors duration-200"
               >
                 Subscribe to receive news from Groove Furniture
@@ -35,7 +35,7 @@ const Footer = () => {
             <h4 className="font-medium mb-3 text-base">SERVICES</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="hover:underline">
+                <Link href="/footer/services" className="hover:underline">
                   Design & Styling Services
                 </Link>
               </li>
@@ -45,7 +45,7 @@ const Footer = () => {
             <h4 className="font-medium mb-3 text-base">SUPPORT</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="hover:underline">
+                <Link href="/footer/support" className="hover:underline">
                   FAQs
                 </Link>
               </li>

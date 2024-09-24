@@ -2,7 +2,7 @@
 
 import SearchComponent from "@/components/shared/SearchInput";
 import AllListings from "./all-listings/page";
-import Hero2 from "@/components/shared/Hero2";
+import Hero2 from "@/components/shared/Hero";
 export default function Home() {
   return (
     <main>
