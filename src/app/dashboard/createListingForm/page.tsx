@@ -208,13 +208,48 @@ export default function CreateListingForm() {
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent className="bg-[#eeebe7]">
-                <SelectItem value="Dining Room" className="hover:bg-[#292524] hover:text-white">Dining Room</SelectItem>
-                <SelectItem value="Living Room" className="hover:bg-[#292524] hover:text-white">Living Room</SelectItem>
-                <SelectItem value="Bedroom" className="hover:bg-[#292524] hover:text-white">Bedroom</SelectItem>
-                <SelectItem value="Rugs & Carpets" className="hover:bg-[#292524] hover:text-white">Rugs & Carpets</SelectItem>
-                <SelectItem value="Lighting" className="hover:bg-[#292524] hover:text-white">Lighting</SelectItem>
-                <SelectItem value="Home Décor" className="hover:bg-[#292524] hover:text-white">Home Décor</SelectItem>
-                <SelectItem value="Movers" className="hover:bg-[#292524] hover:text-white">Movers</SelectItem>
+                <SelectItem
+                  value="Dining Room"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Dining Room
+                </SelectItem>
+                <SelectItem
+                  value="Living Room"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Living Room
+                </SelectItem>
+                <SelectItem
+                  value="Bedroom"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Bedroom
+                </SelectItem>
+                <SelectItem
+                  value="Rugs & Carpets"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Rugs & Carpets
+                </SelectItem>
+                <SelectItem
+                  value="Lighting"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Lighting
+                </SelectItem>
+                <SelectItem
+                  value="Home Décor"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Home Décor
+                </SelectItem>
+                <SelectItem
+                  value="Movers"
+                  className="hover:bg-[#292524] hover:text-white"
+                >
+                  Movers
+                </SelectItem>
               </SelectContent>
             </Select>
             {errors.category && (
@@ -261,7 +296,7 @@ export default function CreateListingForm() {
           </div>
         </CardContent>
 
-        <CardFooter className="bg-gray-50 rounded-b-lg">
+        <CardFooter className="bg-gray-50 rounded-b-lg flex">
           <ShimmerButton className="mx-auto" type="submit">
             Create Listing
           </ShimmerButton>
