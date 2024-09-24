@@ -74,11 +74,19 @@ export default function DashboardPage() {
               {user?.lastName?.[0]}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <h2 className="text-lg font-medium">
-              {user?.firstName} {user?.lastName}
-            </h2>
-          </div>
+        </div>
+        <div>
+          <h2 className="text-lg font-medium">
+            {user?.firstName} {user?.lastName}
+          </h2>
+        </div>
+        <div className="text-medium">
+          <p>
+            <strong>Created:</strong>{" "}
+            {user?.createdAt
+              ? new Date(user.createdAt).toLocaleDateString()
+              : "Not available"}
+          </p>
         </div>
         {/* Sidebar navigation */}
         <nav className="space-y-2">{/* Sidebar Links */}</nav>

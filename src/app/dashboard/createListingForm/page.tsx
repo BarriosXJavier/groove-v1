@@ -26,7 +26,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import ShimmerButton from "@/components/ui/shimmer-button";
 
-// Define the Zod schema
+
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   price: z.coerce
@@ -36,7 +36,7 @@ const schema = z.object({
     .string()
     .max(250, { message: "Description can't exceed 250 characters" }),
   location: z.string().min(1, { message: "Location is required" }),
-  tags: z.string().optional(), // Tags field
+  tags: z.string().optional(), 
   images: z
     .array(z.string().url())
     .max(5, { message: "You can enter up to 5 image URLs" }),
